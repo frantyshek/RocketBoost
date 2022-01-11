@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class PlayerControl : MonoBehaviour
 {
 
     Rigidbody rb;
@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
     [SerializeField] float speed = 100f;
     [SerializeField] float rotateSpeed = 100f;
     [SerializeField] ParticleSystem mainParticles;
+    [SerializeField] GameObject pauseScreen;
 
     bool IsGrounded;
 
@@ -21,7 +22,8 @@ public class Movement : MonoBehaviour
     void Update()
     {
         MoveForward();
-        Rotate();        
+        Rotate();
+        Pause();        
     }
 
     void MoveForward()
@@ -32,12 +34,14 @@ public class Movement : MonoBehaviour
         }
         else
         {
+            //Just to stop the particles and audio
             StopMovingForward();
         }
     }
 
     void StartMovingForward()
     {
+        //Movement so if players hits space the rocket will thrust
         rb.AddRelativeForce(Vector3.up * speed * Time.deltaTime);
             if(!mainParticles.isEmitting)
             {
@@ -64,6 +68,7 @@ public class Movement : MonoBehaviour
 
     void RotationMethod(float rotationPower)
     {
+        //Player can not rotate when the rocket is on the ground(start/checkpoint)
         if(!IsGrounded)
         {
             rb.freezeRotation = true;
@@ -86,6 +91,21 @@ public class Movement : MonoBehaviour
         {
             IsGrounded = false;
         }    
+    }
+
+    void Pause()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+          pauseScreen.SetActive(true);
+          Time.timeScale = 0f;  
+        }
+    }
+
+    void PauseButton()
+    {
+        pauseScreen.SetActive(true);
+        Time.timeScale = 0f;
     }
 }
 

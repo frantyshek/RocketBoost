@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class Pause : MonoBehaviour
 {
    
-   [SerializeField] GameObject pauseScreen;
+    [SerializeField] GameObject pauseScreen;
+    [SerializeField] AudioMixer audioMixer;
 
     void Update()
     {
@@ -32,5 +35,10 @@ public class Pause : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public void SetVolume(float volume)
+    {
+        audioMixer.SetFloat("Volume", volume);
     }
 }

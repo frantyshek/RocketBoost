@@ -8,8 +8,17 @@ public class CollisionHandler : MonoBehaviour
 
     [SerializeField] float timeToReload = 1f;
     [SerializeField] ParticleSystem mainParticles;
+    AudioSource audioRocket; 
     
+    int levelPassed;
+
     bool NoCollision;
+
+    void Start()
+    {
+        audioRocket = GetComponent<AudioSource>();
+        levelPassed = PlayerPrefs.GetInt("LevelPassed");
+    }
 
     void Update() 
     {  
@@ -21,6 +30,11 @@ public class CollisionHandler : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.L))
         {
             NoCollision = !NoCollision;
+        }
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            ReloadLevel();
         }
     }
 
@@ -43,8 +57,9 @@ public class CollisionHandler : MonoBehaviour
     {   
         if(!NoCollision)
         {
-           GetComponent<Movement>().enabled = false;
+           GetComponent<PlayerController>().enabled = false;
             mainParticles.Stop();
+            audioRocket.Stop();
             Invoke("ReloadLevel", timeToReload); 
         }
     }
@@ -57,7 +72,7 @@ public class CollisionHandler : MonoBehaviour
 
     void Finishing()
     {
-        GetComponent<Movement>().enabled = false;
+        GetComponent<PlayerController>().enabled = false;
         Invoke("NextLevel", timeToReload);
     }
 
@@ -65,9 +80,9 @@ public class CollisionHandler : MonoBehaviour
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int nextSceneIndex = currentSceneIndex + 1;
-        if( nextSceneIndex == SceneManager.sceneCountInBuildSettings)
+        if(levelPassed < currentSceneIndex)
         {
-            nextSceneIndex = 0;
+            PlayerPrefs.SetInt("LevelPassed", currentSceneIndex);
         }
         SceneManager.LoadScene(nextSceneIndex);
     }

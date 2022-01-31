@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {   
-    [SerializeField] GameObject levelSelectMenu;
+
     [SerializeField] GameObject settingsMenu;
 
     public void Play()
@@ -15,7 +15,7 @@ public class MainMenu : MonoBehaviour
 
     public void levelSelect()
     {
-        levelSelectMenu.SetActive(true);
+        SceneManager.LoadScene("LevelSelect");
     }
 
     public void Settings()

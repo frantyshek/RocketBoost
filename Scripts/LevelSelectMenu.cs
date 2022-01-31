@@ -6,20 +6,19 @@ using UnityEngine.SceneManagement;
 
 public class LevelSelectMenu : MonoBehaviour
 {
-    [SerializeField] GameObject levelSelectMenu;
-    [SerializeField] Button level02Button;
-    int levelPassed;
+
+    [SerializeField] Button[] levelButtons;
 
     void Start()
     {
-        levelPassed = PlayerPrefs.GetInt("LevelPassed");
-        level02Button.interactable = false;
-
-        switch(levelPassed)
+        int levelUnlocked = PlayerPrefs.GetInt("LevelUnlocked", 1);
+        
+        for(int i = 0; i < levelButtons.Length; i++)
         {
-            case 1:
-                level02Button.interactable = true;
-                break;
+            if(i + 1 > levelUnlocked)
+            {
+                levelButtons[i].interactable = false;
+            }
         }
     }
 
@@ -38,6 +37,6 @@ public class LevelSelectMenu : MonoBehaviour
 
     public void Back()
     {
-        levelSelectMenu.SetActive(false);
+        SceneManager.LoadScene("MainMenu");
     }
 }
